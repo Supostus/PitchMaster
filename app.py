@@ -3,12 +3,13 @@ import logging
 from extensions import db, login_manager
 from routes.auth import auth_bp
 from routes.test import test_bp
+from routes.dashboard import dashboard_bp  # Новый импорт
 from models import User
-import os  # Добавь этот импорт
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecretkey123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'pitchmaster.db')  # Явный путь
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'pitchmaster.db')
 
 db.init_app(app)
 login_manager.init_app(app)
@@ -20,6 +21,7 @@ logging.info('Приложение PitchMaster запущено')
 
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(test_bp, url_prefix='/test')
+app.register_blueprint(dashboard_bp, url_prefix='/dashboard')  # Новый blueprint
 
 from models import User, Objection
 

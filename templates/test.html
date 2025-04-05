@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>PitchMaster - Тест</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Тест перед использованием</h1>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Ваше имя</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="position" class="form-label">Ваша должность</label>
+                <input type="text" class="form-control" id="position" name="position" required>
+            </div>
+            <div class="mb-3">
+                <label for="product" class="form-label">Продукт или услуга</label>
+                <input type="text" class="form-control" id="product" name="product" required>
+            </div>
+            <div class="mb-3">
+                <label for="utp" class="form-label">Уникальное торговое предложение (УТП)</label>
+                <input type="text" class="form-control" id="utp" name="utp" required>
+            </div>
+            <div class="mb-3">
+                <label for="lpr_position" class="form-label">Должность ЛПР</label>
+                <input type="text" class="form-control" id="lpr_position" name="lpr_position" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Типичные возражения (выберите или добавьте свои)</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="objections" value="Дорого" id="obj1">
+                    <label class="form-check-label" for="obj1">Дорого</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="objections" value="Уже есть решение" id="obj2">
+                    <label class="form-check-label" for="obj2">Уже есть решение</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="objections" value="Нет времени" id="obj3">
+                    <label class="form-check-label" for="obj3">Нет времени</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+</body>
+</html>

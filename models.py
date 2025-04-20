@@ -1,4 +1,4 @@
-from extensions import db, login_manager  # Теперь из extensions.py
+from extensions import db, login_manager
 from flask_login import UserMixin
 
 class User(db.Model, UserMixin):

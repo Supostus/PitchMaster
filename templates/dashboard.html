@@ -2,22 +2,408 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>PitchMaster - Личный кабинет</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PitchMaster - Рабочее место</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+            overflow-x: hidden;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #1C2526;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 2%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo img {
+            height: 36px;
+        }
+        .logo span {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .header-btn {
+            background: none;
+            border: 1px solid #E0E0E0;
+            color: #E0E0E0;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        .header-btn:hover {
+            background-color: #2A363B;
+        }
+        .header-btn.exit {
+            padding: 6px;
+            font-size: 16px;
+            line-height: 1;
+            width: 28px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 70px auto 20px;
+            padding: 0 2%;
+        }
+        .main-content {
+            display: flex;
+            justify-content: center;
+        }
+        .call-section {
+            width: 70%;
+            background-color: #1C2526;
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 500px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .call-section h3 {
+            margin: 0 0 15px;
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        #call-content p {
+            margin: 0 0 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        #call-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        #call-form .btn {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
+        }
+        #call-form .btn:hover {
+            transform: scale(1.05);
+        }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-warning { background-color: #ffc107; color: black; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .add-objection-btn {
+            width: 100px;
+            height: 100px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            line-height: 100px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .add-objection-btn:hover {
+            transform: scale(1.05);
+        }
+        #objection-form {
+            margin-top: 15px;
+            background-color: #2A363B;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        #user-form-container {
+            display: {% if show_form %}block{% else %}none{% endif %};
+            margin-bottom: 20px;
+            background-color: #2A363B;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .start-call-btn {
+            width: 80px;
+            height: 80px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            line-height: 80px;
+            text-align: center;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .start-call-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0,123,255,0.5);
+        }
+        @media (max-width: 1200px) {
+            .call-section {
+                width: 85%;
+            }
+            .container {
+                padding: 0 3%;
+            }
+        }
+        @media (max-width: 768px) {
+            .call-section {
+                width: 95%;
+            }
+            .header {
+                padding: 10px 3%;
+            }
+            .logo span {
+                font-size: 16px;
+            }
+            .header-btn {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+            .header-btn.exit {
+                width: 24px;
+                font-size: 14px;
+            }
+            #call-form .btn, .add-objection-btn {
+                width: 80px;
+                height: 80px;
+                font-size: 14px;
+            }
+            .start-call-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 16px;
+                line-height: 60px;
+            }
+            #call-content p {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Личный кабинет</h1>
-        <h3>Ваши данные</h3>
-        <ul class="list-group">
-            <li class="list-group-item"><strong>Имя:</strong> {{ user.name }}</li>
-            <li class="list-group-item"><strong>Должность:</strong> {{ user.position }}</li>
-            <li class="list-group-item"><strong>Продукт:</strong> {{ user.product }}</li>
-            <li class="list-group-item"><strong>УТП:</strong> {{ user.utp }}</li>
-            <li class="list-group-item"><strong>Должность ЛПР:</strong> {{ user.lpr_position }}</li>
-        </ul>
-        <a href="{{ url_for('test.test') }}" class="btn btn-primary mt-3">Обновить данные</a>
-        <a href="{{ url_for('dashboard.call') }}" class="btn btn-success mt-3">Начать звонок</a>
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="PitchMaster Logo">
+            <span>PitchMaster v0.1</span>
+        </div>
+        <div class="header-buttons">
+            <a href="{{ url_for('auth.logout') }}" class="header-btn exit">✖</a>
+            <button class="header-btn" onclick="toggleUserForm()">Обновить карточки</button>
+        </div>
     </div>
+    <div class="container">
+        <div class="main-content">
+            <div class="call-section">
+                <div id="user-form-container">
+                    <h3>Ваши данные</h3>
+                    <form id="user-form">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ user.name or '' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="position" class="form-label">Должность</label>
+                            <input type="text" class="form-control" id="position" name="position" value="{{ user.position or '' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="product" class="form-label">Продукт</label>
+                            <input type="text" class="form-control" id="product" name="product" value="{{ user.product or '' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="utp" class="form-label">УТП</label>
+                            <input type="text" class="form-control" id="utp" name="utp" value="{{ user.utp or '' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lpr_position" class="form-label">Должность ЛПР</label>
+                            <input type="text" class="form-control" id="lpr_position" name="lpr_position" value="{{ user.lpr_position or '' }}" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+                <h3>Заполните данные и начните звонок!</h3>
+                <div id="call-content">
+                    {% if script %}
+                    <p>{{ script }}</p>
+                    <form id="call-form" method="POST">
+                        <input type="hidden" name="stage" id="stage" value="{{ stage }}">
+                        {% for button in buttons %}
+                        <button type="button" class="btn {{ button.class }}" data-response="{{ button.value }}">{{ button.text }}</button>
+                        {% endfor %}
+                        <button type="button" class="add-objection-btn">+</button>
+                    </form>
+                    <form id="objection-form" method="POST">
+                        <input type="hidden" name="stage" value="{{ stage }}">
+                        <div class="mb-3">
+                            <label for="new_objection" class="form-label">Новое возражение</label>
+                            <input type="text" class="form-control" id="new_objection" name="new_objection" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </form>
+                    {% else %}
+                    <p>Заполните данные и начните звонок!</p>
+                    <button type="button" class="start-call-btn" onclick="toggleUserForm()">Начать</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleObjectionForm() {
+            const form = document.getElementById('objection-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleUserForm() {
+            const formContainer = document.getElementById('user-form-container');
+            formContainer.style.display = 'block';
+        }
+
+        // Делегирование событий для call-content
+        document.getElementById('call-content').addEventListener('click', async (e) => {
+            // Обработка кнопок возражений
+            if (e.target.classList.contains('btn') && e.target.dataset.response) {
+                e.preventDefault();
+                const stage = document.getElementById('stage').value;
+                const response = e.target.dataset.response;
+                try {
+                    const formData = new FormData();
+                    formData.append('stage', stage);
+                    formData.append('response', response);
+                    const res = await fetch('/dashboard/call', {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    const data = await res.json();
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        updateCallContent(data.script, data.buttons, data.stage);
+                    }
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    alert('Ошибка при загрузке карточки');
+                }
+            }
+            // Обработка кнопки "+"
+            if (e.target.classList.contains('add-objection-btn')) {
+                toggleObjectionForm();
+            }
+        });
+
+        // Обработка формы пользователя
+        document.getElementById('user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/dashboard/update_user', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    alert('Данные сохранены!');
+                    document.getElementById('user-form-container').style.display = 'none';
+                    fetchCallContent('greeting');
+                } else {
+                    alert('Ошибка: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка при сохранении данных');
+            }
+        });
+
+        // Обработка добавления возражения
+        document.getElementById('objection-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/dashboard/add_objection', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    e.target.reset();
+                    toggleObjectionForm();
+                    fetchCallContent(data.stage);
+                } else {
+                    alert('Ошибка: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка при добавлении возражения');
+            }
+        });
+
+        // Загрузка содержимого карточки
+        async function fetchCallContent(stage) {
+            try {
+                const response = await fetch(`/dashboard/call?stage=${stage}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const data = await response.json();
+                updateCallContent(data.script, data.buttons, data.stage);
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка при загрузке карточки');
+            }
+        }
+
+        // Обновление содержимого карточки
+        function updateCallContent(script, buttons, stage) {
+            const callContent = document.getElementById('call-content');
+            callContent.innerHTML = `
+                <p>${script}</p>
+                <form id="call-form" method="POST">
+                    <input type="hidden" name="stage" id="stage" value="${stage}">
+                    ${buttons.map(button => `
+                        <button type="button" class="btn ${button.class}" data-response="${button.value}">${button.text}</button>
+                    `).join('')}
+                    <button type="button" class="add-objection-btn">+</button>
+                </form>
+                <form id="objection-form" method="POST" style="display:none;">
+                    <input type="hidden" name="stage" value="${stage}">
+                    <div class="mb-3">
+                        <label for="new_objection" class="form-label">Новое возражение</label>
+                        <input type="text" class="form-control" id="new_objection" name="new_objection" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            `;
+        }
+    </script>
 </body>
 </html>

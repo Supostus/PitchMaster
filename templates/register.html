@@ -2,12 +2,12 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>PitchMaster - Вход</title>
+    <title>PitchMaster - Регистрация</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Вход</h1>
+        <h1>Регистрация</h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -24,9 +24,9 @@
                 <label for="password" class="form-label">Пароль</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Войти</button>
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
         </form>
-        <p>Нет аккаунта? <a href="{{ url_for('auth.register') }}">Зарегистрируйтесь</a></p>
+        <p>Уже есть аккаунт? <a href="{{ url_for('auth.login') }}">Войдите</a></p>
     </div>
 </body>
 </html>
